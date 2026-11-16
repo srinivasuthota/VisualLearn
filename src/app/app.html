@@ -1,0 +1,209 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="#" aria-label="VisualLearn home">
+      <span class="brand-mark">V</span>
+      <span>visual<span class="brand-light">learn</span></span>
+    </a>
+
+    <div class="side-label">WORKSPACE</div>
+    <a class="nav-link active" href="#home"><span class="nav-icon">⌂</span> Overview</a>
+    <a class="nav-link" href="#explore"><span class="nav-icon">⌕</span> Explore concepts</a>
+    <a class="nav-link" href="#lesson-workspace"><span class="nav-icon">▣</span> Learning playground</a>
+
+    <div class="side-label side-label-spaced">YOUR LEARNING</div>
+    <a class="nav-link" href="#explore"><span class="nav-icon">♡</span> Saved lessons</a>
+    <a class="nav-link" href="#explore"><span class="nav-icon">◷</span> Recently viewed</a>
+
+    <div class="sidebar-bottom">
+      <div class="free-card">
+        <div class="free-icon">✦</div>
+        <strong>Learning should be open to everyone.</strong>
+        <p>Explore concepts at your own pace. No account needed.</p>
+      </div>
+      <div class="profile-row">
+        <div class="avatar">L</div>
+        <div><strong>Guest learner</strong><small>Free access</small></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content" id="home">
+    <header class="topbar">
+      <div class="breadcrumb">Workspace <span>/</span> Overview</div>
+      <div class="topbar-right">
+        <span class="status-dot"></span><span class="local-label">Local learning mode</span>
+        <div class="avatar small-avatar">L</div>
+      </div>
+    </header>
+
+    <section class="welcome-section">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-dot"></span> YOUR VISUAL LEARNING SPACE</div>
+        <h1>Make complex ideas<br/><span class="gradient-text">click into place.</span></h1>
+        <p class="welcome-copy">Explore computer science concepts through interactive lessons.<br class="desktop-break"/> Don't just read how things work. See them happen.</p>
+      </div>
+      <div class="welcome-art" aria-hidden="true">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="art-core">V</div>
+        <div class="float-card float-card-top">01 <span>Explore</span></div>
+        <div class="float-card float-card-bottom">02 <span>Understand</span></div>
+        <div class="spark spark-one">✳</div><div class="spark spark-two">✦</div>
+      </div>
+    </section>
+
+    <section class="stats-row" aria-label="Learning overview">
+      <div class="stat-card"><div class="stat-icon purple">▦</div><div><strong>6</strong><span>Concepts to explore</span></div></div>
+      <div class="stat-card"><div class="stat-icon blue">⌘</div><div><strong>4</strong><span>Learning categories</span></div></div>
+      <div class="stat-card"><div class="stat-icon green">↗</div><div><strong>1</strong><span>Interactive playground</span></div></div>
+    </section>
+
+    <section class="explore-section" id="explore">
+      <div class="section-heading">
+        <div><div class="eyebrow">LEARNING LIBRARY</div><h2>Explore concepts</h2><p>Pick a concept and learn it one visual step at a time.</p></div>
+        <div class="search-box"><span>⌕</span><input #searchInput type="search" placeholder="Search concepts..." (input)="setSearchText(searchInput.value)"/></div>
+      </div>
+
+      <div class="filter-row">
+        @for (category of categories; track category) {
+          <button class="filter-chip" [class.selected]="selectedCategory() === category" (click)="selectCategory(category)">{{ category }}</button>
+        }
+      </div>
+
+      <div class="lesson-grid">
+        @for (lesson of filteredLessons(); track lesson.id) {
+          <article class="lesson-card" [class.locked-card]="!lesson.available">
+            <div class="lesson-card-top">
+              <div class="lesson-icon" [class.icon-blue]="lesson.category === 'Searching'" [class.icon-orange]="lesson.category === 'Sorting'" [class.icon-green]="lesson.category === 'Data Structures'">{{ lesson.icon }}</div>
+              @if (lesson.available) { <span class="available-tag">INTERACTIVE</span> }
+              @else { <span class="soon-tag">COMING SOON</span> }
+            </div>
+            <div class="lesson-category">{{ lesson.category }}</div>
+            <h3>{{ lesson.title }}</h3>
+            <p>{{ lesson.description }}</p>
+            <div class="lesson-card-footer">
+              <div class="lesson-meta"><span>{{ lesson.level }}</span><span class="meta-dot">·</span><span>{{ lesson.duration }}</span></div>
+              <button class="open-lesson" [disabled]="!lesson.available" (click)="selectLesson(lesson)">
+                {{ lesson.available ? 'Explore lesson ↗' : 'Coming soon' }}
+              </button>
+            </div>
+          </article>
+        } @empty {
+          <div class="empty-state">No concepts match your search. Try another keyword.</div>
+        }
+      </div>
+    </section>
+
+    <section class="playground-section" id="lesson-workspace">
+      <div class="section-heading playground-heading">
+        <div><div class="eyebrow">HANDS-ON PLAYGROUND</div><h2>{{ activeLessonTitle }}</h2><p>{{ activeLesson() === 'linear-search' ? 'Watch the algorithm inspect each element from left to right.' : activeLesson() === 'bubble-sort' ? 'Watch adjacent values compare and swap until the array is sorted.' : 'Change the target and step through the algorithm.' }}</p></div>
+        <span class="interactive-pill"><span></span> LIVE INTERACTIVE</span>
+      </div>
+
+    @if (activeLesson() === 'stack') {
+     <app-stack-visualizer></app-stack-visualizer>
+    } @else if (activeLesson() === 'queue') {
+      <app-queue-visualizer></app-queue-visualizer>
+    } @else if (activeLesson() === 'merge-sort') {
+      <app-merge-sort-visualizer></app-merge-sort-visualizer>
+    } @else if (activeLesson() === 'big-o') {
+      <app-big-o-visualizer></app-big-o-visualizer>
+    } @else {
+      <div class="playground-layout">
+        <div class="visual-panel">
+          <div class="panel-header">
+            <div><span class="panel-kicker">{{ activeLesson() === 'bubble-sort' ? 'VISUALIZER / SORTING' : 'VISUALIZER / SEARCHING' }}</span><h3>Watch {{ activeLessonTitle }} work</h3></div>
+            <button class="reset-button" (click)="restartWithDefaults()">↺ Reset example</button>
+          </div>
+
+          <div class="array-stage">
+            <div class="array-caption"><span>{{ activeLesson() === 'bubble-sort' ? 'ARRAY VALUES' : activeLesson() === 'linear-search' ? 'ARRAY' : 'SORTED ARRAY' }}</span><span>INDEX →</span></div>
+            @if (activeLesson() === 'bubble-sort') {
+              <div class="sort-bars">
+                @for (value of (currentStep()?.array ?? values()); track $index) {
+                  <div class="sort-bar-column">
+                    <div class="sort-bar" [class]="cellState($index)" [style.height.px]="34 + value * 2.1">
+                      <strong>{{ value }}</strong>
+                    </div>
+                    <small>{{ $index }}</small>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="array-grid" [style.--cell-count]="values().length">
+                @for (value of values(); track $index) {
+                  <div class="array-item" [class]="cellState($index)">
+                    <strong>{{ value }}</strong>
+                    <small>{{ $index }}</small>
+                  </div>
+                }
+              </div>
+            }
+            <div class="legend">
+              @if (activeLesson() === 'bubble-sort') {
+                <span><i class="legend-dot compare-dot"></i>Comparing</span>
+                <span><i class="legend-dot swap-dot"></i>Swapping</span>
+                <span><i class="legend-dot sorted-dot"></i>Sorted</span>
+              } @else if (activeLesson() === 'linear-search') {
+                <span><i class="legend-dot mid-dot"></i>Current</span>
+                <span><i class="legend-dot found-dot"></i>Found</span>
+                <span><i class="legend-dot discarded-dot"></i>Already checked</span>
+              } @else {
+                <span><i class="legend-dot low-dot"></i>Low</span>
+                <span><i class="legend-dot mid-dot"></i>Middle</span>
+                <span><i class="legend-dot high-dot"></i>High</span>
+                <span><i class="legend-dot discarded-dot"></i>Discarded</span>
+              }
+            </div>
+          </div>
+
+          <div class="step-explanation">
+            <div class="step-count">STEP {{ stepIndex() + 1 }} <span>/ {{ steps().length }}</span></div>
+            <h3>{{ currentStep()?.title }}</h3>
+            <p>{{ currentStep()?.explanation }}</p>
+          </div>
+
+          <app-step-controls
+            [totalSteps]="steps().length"
+            [currentIndex]="stepIndex()"
+            (indexChange)="stepIndex.set($event)" />
+        </div>
+
+        <aside class="config-panel">
+          <div class="config-heading"><span class="config-icon">⚙</span><div><h3>Try it yourself</h3><p>Customize the input</p></div></div>
+
+          @if (activeLesson() !== 'bubble-sort') {
+            <label for="target-input">Target value</label>
+            <input id="target-input" class="number-input" type="number" [value]="target()" #targetInput (change)="setTarget(targetInput.value)"/>
+            <p class="field-hint">The number {{ activeLesson() === 'linear-search' ? 'Linear Search' : 'Binary Search' }} will look for.</p>
+          }
+
+          <label for="array-input">{{ activeLesson() === 'bubble-sort' || activeLesson() === 'linear-search' ? 'Array values' : 'Sorted array' }}</label>
+          <input id="array-input" class="text-input" type="text" [value]="values().join(', ')" #arrayInput (change)="setArray(arrayInput.value)"/>
+          <p class="field-hint">{{ activeLesson() === 'binary-search' ? 'Use comma-separated, ascending whole numbers.' : 'Use comma-separated whole numbers in any order.' }}</p>
+
+          @if (inputError()) { <div class="input-error">{{ inputError() }}</div> }
+
+          <div class="result-box">
+            <span class="result-label">{{ activeLesson() === 'bubble-sort' ? 'SORT STATUS' : 'SEARCH RESULT' }}</span>
+            <strong>{{ resultText }}</strong>
+            <small>{{ activeLesson() === 'bubble-sort' ? 'Adjacent comparisons and swaps' : 'Zero-based index' }}</small>
+          </div>
+          @if (activeLesson() === 'bubble-sort') {
+            <div class="sort-metrics"><div><span>Comparisons</span><strong>{{ currentStep()?.comparisons ?? 0 }}</strong></div><div><span>Swaps</span><strong>{{ currentStep()?.swaps ?? 0 }}</strong></div></div>
+          }
+
+          <div class="complexity-box">
+            <div class="complexity-title">ALGORITHM COMPLEXITY</div>
+            <div><span>Time complexity</span><strong>{{ activeLesson() === 'bubble-sort' ? 'O(n²)' : activeLesson() === 'linear-search' ? 'O(n)' : 'O(log n)' }}</strong></div>
+            <div><span>Space complexity</span><strong>O(1)</strong></div>
+          </div>
+        </aside>
+      </div>
+    }
+    </section>
+    
+
+    <footer class="footer"><span class="footer-brand">visual<span>learn</span></span><span>Built for curious minds. Free to explore.</span><span>AI-free learning experience</span></footer>
+  </main>
+</div>

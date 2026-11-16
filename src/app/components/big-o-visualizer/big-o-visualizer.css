@@ -1,0 +1,299 @@
+
+.big-o-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  color: #1e293b;
+}
+
+.big-o-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.eyebrow {
+  color: #6474e8;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.big-o-header h2 {
+  margin: 8px 0;
+  font-size: 28px;
+}
+
+.big-o-header p,
+.chart-heading p,
+.input-heading p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.complexity-selector,
+.input-control,
+.selected-details,
+.chart-panel,
+.operation-table {
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+}
+
+.complexity-selector h3,
+.input-heading h3,
+.chart-heading h3,
+.operation-table h3 {
+  margin-top: 0;
+  font-size: 17px;
+}
+
+.complexity-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.complexity-option {
+  padding: 12px 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #334155;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.complexity-option:hover {
+  border-color: #6474e8;
+  transform: translateY(-2px);
+}
+
+.complexity-option.selected {
+  background: #6474e8;
+  color: #ffffff;
+  border-color: #6474e8;
+}
+
+.input-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input-heading h3 {
+  margin-bottom: 5px;
+}
+
+.input-heading p {
+  margin-bottom: 0;
+}
+
+.input-heading strong {
+  font-size: 30px;
+  color: #6474e8;
+}
+
+.input-control input[type="range"] {
+  width: 100%;
+  margin-top: 24px;
+  accent-color: #6474e8;
+  cursor: pointer;
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.selected-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+
+.selected-details h2 {
+  margin: 8px 0;
+  font-size: 32px;
+  color: #4338ca;
+}
+
+.selected-details p {
+  margin-bottom: 0;
+  color: #475569;
+  font-size: 14px;
+}
+
+.operation-count {
+  min-width: 160px;
+  padding: 16px;
+  background: #ffffff;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.operation-count span {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.operation-count strong {
+  display: block;
+  margin-top: 8px;
+  color: #4338ca;
+  font-size: 25px;
+}
+
+.chart-heading {
+  margin-bottom: 18px;
+}
+
+.chart-heading h3 {
+  margin-bottom: 5px;
+}
+
+.chart-heading p {
+  margin: 0;
+}
+
+.chart-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.big-o-chart {
+  display: block;
+  width: 100%;
+  min-width: 500px;
+  height: auto;
+}
+
+.axis-label {
+  fill: #64748b;
+  font-size: 11px;
+}
+
+.axis-title {
+  fill: #475569;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #64748b;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.legend-item.legend-active {
+  border-color: #6474e8;
+  color: #4338ca;
+  background: #eef2ff;
+}
+
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #94a3b8;
+}
+
+.legend-dot.active-dot {
+  background: #4f46e5;
+}
+
+.operation-table h3 {
+  margin-bottom: 18px;
+}
+
+.operation-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px;
+  margin-top: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.operation-row:hover {
+  background: #f8fafc;
+}
+
+.operation-row.active-row {
+  background: #eef2ff;
+  border-color: #a5b4fc;
+}
+
+.operation-row strong {
+  color: #334155;
+}
+
+.operation-row span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.operation-row .selected-label {
+  color: #4338ca;
+  font-weight: 700;
+}
+
+@media (max-width: 650px) {
+  .big-o-container {
+    padding: 12px;
+  }
+
+  .big-o-header h2 {
+    font-size: 22px;
+  }
+
+  .selected-details {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .operation-count {
+    width: auto;
+  }
+
+  .operation-row {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .complexity-option,
+  .operation-row,
+  .legend-item {
+    transition: none;
+  }
+}

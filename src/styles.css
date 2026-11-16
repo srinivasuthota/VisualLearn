@@ -1,0 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'DM Sans',Inter,Arial,sans-serif;background:#f7f8fc;-webkit-font-smoothing:antialiased}
+button,input{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #9b8cf4;outline-offset:2px}

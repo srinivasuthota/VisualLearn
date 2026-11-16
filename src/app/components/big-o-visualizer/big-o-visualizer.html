@@ -1,0 +1,203 @@
+
+<div class="big-o-container">
+
+  <header class="big-o-header">
+    <div>
+      <span class="eyebrow">ALGORITHM ANALYSIS</span>
+      <h2>Big-O Complexity Visualizer</h2>
+      <p>Understand how algorithm performance grows as input size increases.</p>
+    </div>
+  </header>
+
+  <!-- Complexity selection -->
+  <section class="complexity-selector">
+    <h3>Select a Time Complexity</h3>
+
+    <div class="complexity-options">
+      @for (item of complexities; track item.id) {
+        <button
+          class="complexity-option"
+          [class.selected]="selectedComplexity() === item.id"
+          (click)="selectComplexity(item.id)">
+          {{ item.name }}
+        </button>
+      }
+    </div>
+  </section>
+
+  <!-- Input size control -->
+  <section class="input-control">
+    <div class="input-heading">
+      <div>
+        <h3>Input Size (n)</h3>
+        <p>Increase the input size to observe operation growth.</p>
+      </div>
+
+      <strong>{{ inputSize() }}</strong>
+    </div>
+
+    <input
+      type="range"
+      min="1"
+      max="20"
+      step="1"
+      [value]="inputSize()"
+      (input)="updateInputSize(+$any($event.target).value)"
+    />
+
+    <div class="range-labels">
+      <span>1</span>
+      <span>20</span>
+    </div>
+  </section>
+
+  <!-- Selected complexity details -->
+  <section class="selected-details">
+    <div>
+      <span class="eyebrow">SELECTED COMPLEXITY</span>
+      <h2>{{ selectedDetails().name }}</h2>
+      <p>{{ selectedDetails().description }}</p>
+    </div>
+
+    <div class="operation-count">
+      <span>Estimated operations</span>
+      <strong>{{ selectedDetails().operations | number }}</strong>
+    </div>
+  </section>
+
+  <!-- Graph -->
+  <section class="chart-panel">
+    <div class="chart-heading">
+      <div>
+        <h3>Growth Comparison</h3>
+        <p>Compare how different complexities grow.</p>
+      </div>
+    </div>
+
+    <div class="chart-scroll">
+      <svg
+        class="big-o-chart"
+        [attr.viewBox]="'0 0 ' + chart.width + ' ' + chart.height"
+        role="img"
+        aria-label="Graph comparing Big-O time complexity growth">
+
+        <!-- Horizontal grid lines -->
+        @for (tick of [0, 250, 500, 750, 1000]; track tick) {
+          <line
+            [attr.x1]="chart.left"
+            [attr.x2]="chart.right"
+            [attr.y1]="chart.bottom - (tick / chart.maxOperations) * (chart.bottom - chart.top)"
+            [attr.y2]="chart.bottom - (tick / chart.maxOperations) * (chart.bottom - chart.top)"
+            stroke="#e2e8f0"
+            stroke-dasharray="4 4" />
+
+          <text
+            [attr.x]="chart.left - 8"
+            [attr.y]="chart.bottom - (tick / chart.maxOperations) * (chart.bottom - chart.top) + 4"
+            text-anchor="end"
+            class="axis-label">
+            {{ tick }}
+          </text>
+        }
+
+        <!-- X-axis -->
+        <line
+          [attr.x1]="chart.left"
+          [attr.y1]="chart.bottom"
+          [attr.x2]="chart.right"
+          [attr.y2]="chart.bottom"
+          stroke="#64748b" />
+
+        <!-- Y-axis -->
+        <line
+          [attr.x1]="chart.left"
+          [attr.y1]="chart.top"
+          [attr.x2]="chart.left"
+          [attr.y2]="chart.bottom"
+          stroke="#64748b" />
+
+        <!-- Complexity curves -->
+        @for (line of chartLines(); track line.id) {
+          <polyline
+            [attr.points]="line.points"
+            fill="none"
+            [attr.stroke]="
+              line.id === selectedComplexity()
+                ? '#4f46e5'
+                : '#94a3b8'
+            "
+            [attr.stroke-width]="
+              line.id === selectedComplexity() ? 4 : 2
+            "
+            [attr.opacity]="
+              line.id === selectedComplexity() ? 1 : 0.55
+            "
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+        }
+
+        <!-- Current input marker -->
+        <line
+          [attr.x1]="chart.left + ((inputSize() - 1) / 19) * (chart.right - chart.left)"
+          [attr.x2]="chart.left + ((inputSize() - 1) / 19) * (chart.right - chart.left)"
+          [attr.y1]="chart.top"
+          [attr.y2]="chart.bottom"
+          stroke="#f59e0b"
+          stroke-width="2"
+          stroke-dasharray="5 4" />
+
+        <text
+          [attr.x]="chart.left"
+          [attr.y]="chart.height - 12"
+          class="axis-title">
+          Input Size (n)
+        </text>
+
+        <text
+          x="12"
+          y="15"
+          class="axis-title">
+          Operations
+        </text>
+
+      </svg>
+    </div>
+
+    <div class="chart-legend">
+      @for (line of chartLines(); track line.id) {
+        <button
+          class="legend-item"
+          [class.legend-active]="selectedComplexity() === line.id"
+          (click)="selectComplexity(line.id)">
+          <span
+            class="legend-dot"
+            [class.active-dot]="selectedComplexity() === line.id">
+          </span>
+          {{ line.name }}
+        </button>
+      }
+    </div>
+  </section>
+
+  <!-- Operation comparison -->
+  <section class="operation-table">
+    <h3>Operations at n = {{ inputSize() }}</h3>
+
+    @for (item of complexities; track item.id) {
+      <div
+        class="operation-row"
+        [class.active-row]="selectedComplexity() === item.id"
+        (click)="selectComplexity(item.id)">
+
+        <strong>{{ item.name }}</strong>
+
+        <span>{{ getOperations(item.id) | number }} operations</span>
+
+        @if (selectedComplexity() === item.id) {
+          <span class="selected-label">Selected</span>
+        }
+      </div>
+    }
+  </section>
+
+</div>

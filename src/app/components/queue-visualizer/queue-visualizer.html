@@ -1,0 +1,148 @@
+<div class="queue-container">
+  <div class="header">
+    <div>
+      <span class="eyebrow">DATA STRUCTURES</span>
+      <h2>Queue Visualizer</h2>
+      <p>Understand how Queue works through interactive operations.</p>
+    </div>
+    <div class="fifo-badge">FIFO</div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <span>Queue Size</span>
+      <strong>{{ queue().length }} / {{ capacity }}</strong>
+    </div>
+
+    <div class="info-card">
+      <span>Front Element</span>
+      <strong>{{ frontValue() ?? 'Empty' }}</strong>
+    </div>
+
+    <div class="info-card">
+      <span>Rear Element</span>
+      <strong>{{ rearValue() ?? 'Empty' }}</strong>
+    </div>
+
+    <div class="info-card">
+      <span>Operations</span>
+      <strong>{{ operationCount() }}</strong>
+    </div>
+  </div>
+
+  <div class="workspace">
+    <section class="visual-section">
+      <div class="section-heading">
+        <h3>Queue Visualization</h3>
+      </div>
+
+      <div class="queue-direction">
+        <span>FRONT</span>
+        <span>← DEQUEUE</span>
+        <span>ENQUEUE →</span>
+        <span>REAR</span>
+      </div>
+
+      <div class="queue-area">
+        <div class="empty-message" *ngIf="queue().length === 0">
+          <div class="empty-icon">↔</div>
+          <p>Queue is empty</p>
+          <small>Enqueue an element to get started</small>
+        </div>
+
+        <div
+          class="queue-element"
+          *ngFor="let item of queue(); let i = index"
+          [class.front-element]="i === 0"
+          [class.rear-element]="i === queue().length - 1">
+
+          <span class="element-value">{{ item }}</span>
+
+          <span class="element-label" *ngIf="i === 0">
+            FRONT
+          </span>
+
+          <span class="element-label" *ngIf="i === queue().length - 1 && i !== 0">
+            REAR
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls-section">
+      <h3>Operations</h3>
+
+      <label for="queueValue">Enter a value</label>
+
+      <div class="input-group">
+        <input
+          #queueValue
+          id="queueValue"
+          type="number"
+          placeholder="Example: 25"
+          (keyup.enter)="enqueueValue(queueValue.value); queueValue.value = ''"
+        />
+
+        <button
+          class="enqueue-button"
+          (click)="enqueueValue(queueValue.value); queueValue.value = ''">
+          Enqueue →
+        </button>
+      </div>
+
+      <button class="operation-button dequeue-button" (click)="dequeue()">
+        ← Dequeue
+      </button>
+
+      <button class="operation-button peek-button" (click)="peek()">
+        Peek 👁
+      </button>
+
+      <button class="operation-button reset-button" (click)="reset()">
+        Reset ↻
+      </button>
+
+      <div class="operation-info">
+        <strong>Last Operation</strong>
+        <p>{{ lastOperation() }}</p>
+      </div>
+
+      <div class="message">
+        {{ message() }}
+      </div>
+    </section>
+  </div>
+
+  <div class="concept-section">
+    <h3>How does Queue work?</h3>
+
+    <p>
+      Queue follows the FIFO principle:
+      <strong>First In, First Out.</strong>
+      The first element added is the first element removed.
+    </p>
+
+    <div class="complexity-grid">
+      <div>
+        <strong>Enqueue</strong>
+        <span>O(1)</span>
+      </div>
+
+      <div>
+        <strong>Dequeue</strong>
+        <span>O(n)*</span>
+      </div>
+
+      <div>
+        <strong>Peek</strong>
+        <span>O(1)</span>
+      </div>
+    </div>
+
+    <small>
+      *This visualizer uses a JavaScript array and removes the first item
+      with slice(), which copies the remaining items. A linked-list or
+      circular-buffer queue can perform dequeue in O(1).
+    </small>
+  </div>
+</div>

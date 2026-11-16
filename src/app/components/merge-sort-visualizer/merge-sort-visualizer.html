@@ -1,0 +1,295 @@
+<section class="recursion-tree-panel">
+
+  <div class="tree-heading">
+    <div>
+      <span class="eyebrow">DIVIDE AND CONQUER</span>
+      <h3>Recursion Tree</h3>
+      <p>Follow how the original array splits and merges.</p>
+    </div>
+
+    <span class="tree-step">
+      Step {{ stepIndex() + 1 }}
+    </span>
+  </div>
+
+  <div class="tree-legend">
+    <span><i class="legend-dot pending"></i> Waiting</span>
+    <span><i class="legend-dot split"></i> Divided</span>
+    <span><i class="legend-dot merged"></i> Merged</span>
+    <span><i class="legend-dot leaf"></i> Single element</span>
+  </div>
+
+  <div class="tree-scroll">
+
+    @for (level of currentStep().treeLevels; track level.depth) {
+
+      @if (level.depth > 0) {
+  <div class="tree-connectors"
+       [style.gridTemplateColumns]="'repeat(' + level.columns + ', minmax(55px, 1fr))'">
+
+    @for (node of level.nodes; track node.id) {
+      <div
+        class="tree-edge"
+        [class.edge-active]="node.status !== 'pending'">
+        <span>↓</span>
+      </div>
+    }
+
+  </div>
+}
+      <div
+        class="tree-level"
+        [style.gridTemplateColumns]="'repeat(' + level.columns + ', minmax(55px, 1fr))'">
+
+        @for (node of level.nodes; track node.id) {
+          <div
+            class="tree-node"
+            [style.gridColumn]="node.position + 1"
+            [class.node-pending]="node.status === 'pending'"
+            [class.node-split]="node.status === 'split'"
+            [class.node-merged]="node.status === 'merged'"
+            [class.node-leaf]="node.status === 'leaf'">
+
+            <div class="node-values">
+              @for (value of node.values; track $index) {
+                <span>{{ value }}</span>
+              }
+            </div>
+
+            <small>
+              {{
+                node.status === 'pending'
+                  ? 'Waiting'
+                  : node.status === 'split'
+                    ? 'Divided'
+                    : node.status === 'merged'
+                      ? 'Merged'
+                      : 'Leaf'
+              }}
+            </small>
+          </div>
+        }
+
+      </div>
+    }
+
+  </div>
+
+<!-- Merge Sort Step Controls -->
+<section class="controls">
+  <button
+    class="secondary-button"
+    (click)="previousStep()"
+    [disabled]="isFirstStep()">
+    ← Previous
+  </button>
+
+  <button
+    class="reset-button"
+    (click)="reset()">
+    Reset
+  </button>
+
+  <button
+    class="next-button"
+    (click)="nextStep()"
+    [disabled]="isLastStep()">
+    Next →
+  </button>
+</section>
+
+<!-- Merge Process Visualization -->
+<section class="merge-process-panel">
+  <div class="tree-heading">
+    <div>
+      <span class="eyebrow">COMBINE AND CONQUER</span>
+      <h3>Merge Process</h3>
+      <p>See how two sorted arrays are combined.</p>
+    </div>
+  </div>
+
+  <div class="merge-arrays">
+
+    <!-- Left Array -->
+    <div class="merge-array-box">
+      <span class="array-label">LEFT ARRAY</span>
+
+      <div class="merge-elements">
+        @for (value of currentStep().left; track $index) {
+        <div
+            class="merge-element left-element"
+            [class.comparing]="currentStep().compareLeftIndex === $index">
+            {{ value }}
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="merge-plus">+</div>
+
+    <!-- Right Array -->
+    <div class="merge-array-box">
+      <span class="array-label">RIGHT ARRAY</span>
+
+      <div class="merge-elements">
+       @for (value of currentStep().right; track $index) {
+        <div
+            class="merge-element right-element"
+            [class.comparing]="currentStep().compareRightIndex === $index">
+            {{ value }}
+        </div>
+        }
+      </div>
+    </div>
+
+<!-- Element Comparison -->
+<div class="comparison-panel">
+  <h4>Element Comparison</h4>
+
+  <div class="comparison-values">
+    <div class="comparison-card left-compare">
+      <span>LEFT VALUE</span>
+      <strong>
+        {{ currentStep().compareLeft ?? '—' }}
+      </strong>
+    </div>
+
+    <div class="comparison-symbol">VS</div>
+
+    <div class="comparison-card right-compare">
+      <span>RIGHT VALUE</span>
+      <strong>
+        {{ currentStep().compareRight ?? '—' }}
+      </strong>
+    </div>
+  </div>
+
+  @if (currentStep().selectedValue !== null) {
+    <div class="selected-value">
+      <span>SELECTED VALUE</span>
+      <strong>{{ currentStep().selectedValue }}</strong>
+      <p>This value was added to the merged result.</p>
+    </div>
+  } @else {
+    <p class="comparison-hint">
+      {{ currentStep().explanation }}
+    </p>
+  }
+</div>
+
+<!-- Merge Result -->
+<div class="merge-result-box">
+  <span class="array-label">MERGED RESULT SO FAR</span>
+
+  <div class="merge-elements">
+    @for (value of currentStep().mergedValues; track $index) {
+      <div class="merge-element result-element">
+        {{ value }}
+      </div>
+    }
+
+    @if (currentStep().mergedValues.length === 0) {
+      <span>Waiting for comparison...</span>
+    }
+  </div>
+</div>
+
+
+  </div>
+
+  <div class="merge-down-arrow">↓</div>
+
+  <!-- Result Array -->
+  <div class="merge-result-box">
+    <span class="array-label">CURRENT ARRAY STATE</span>
+
+    <div class="merge-elements">
+      @for (value of currentStep().mergedValues; track $index) {
+  <div
+    class="merge-element result-element"
+    [class.newly-added]="
+      currentStep().selectedValue === value &&
+      $index === currentStep().mergedValues.length - 1
+    ">
+    {{ value }}
+  </div>
+}
+    </div>
+  </div>
+
+  <div class="merge-info">
+    <strong>How merging works</strong>
+    <p>
+      Compare the first available elements from both sorted arrays.
+      Pick the smaller element and place it into the result.
+      Repeat until all elements are merged.
+    </p>
+  </div>
+</section>
+<section class="complexity-panel">
+  <div class="tree-heading">
+    <div>
+      <span class="eyebrow">ALGORITHM ANALYSIS</span>
+      <h3>Why O(n log n)?</h3>
+      <p>Understand how splitting and merging determine the time complexity.</p>
+    </div>
+  </div>
+
+  <div class="complexity-grid">
+    <div class="complexity-card">
+      <span class="complexity-label">SPLITTING LEVELS</span>
+      <strong>log₂(n)</strong>
+      <p>Each split divides an array into smaller halves until single elements remain.</p>
+    </div>
+
+    <div class="complexity-card">
+      <span class="complexity-label">WORK PER LEVEL</span>
+      <strong>O(n)</strong>
+      <p>At each merge level, all n elements are processed.</p>
+    </div>
+
+    <div class="complexity-card">
+      <span class="complexity-label">TOTAL TIME</span>
+      <strong>O(n log n)</strong>
+      <p>Number of levels multiplied by the work at each level.</p>
+    </div>
+
+    <div class="complexity-card">
+      <span class="complexity-label">EXTRA SPACE</span>
+      <strong>O(n)</strong>
+      <p>Temporary arrays are used while merging elements.</p>
+    </div>
+  </div>
+
+  <div class="complexity-breakdown">
+  <h4>Actual Splitting Levels</h4>
+
+  @for (level of complexityLevels(); track level.depth) {
+    <div class="complexity-level">
+      <span>Level {{ level.depth }}</span>
+
+      <div class="level-blocks">
+        @for (block of [].constructor(level.subarrays); track $index) {
+          <i></i>
+        }
+      </div>
+
+      <strong>{{ level.subarrays }} subarrays</strong>
+    </div>
+  }
+</div>
+
+  <div class="complexity-formula">
+    <span>Final Formula</span>
+    <strong>O(n) × O(log n) = O(n log n)</strong>
+  </div>
+</section>
+
+
+
+  <div class="tree-explanation">
+    <strong>What is happening?</strong>
+    <p>{{ currentStep().explanation }}</p>
+  </div>
+
+</section>
